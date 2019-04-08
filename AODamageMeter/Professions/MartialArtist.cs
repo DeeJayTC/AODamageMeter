@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Martial Artist";
         public override Color Color => Color.FromArgb(183, 120, 62);
-    }
+
+		public override string[] ClassNanoList => throw new System.NotImplementedException();
+	}
 }

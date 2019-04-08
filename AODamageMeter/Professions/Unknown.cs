@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Unknown";
         public override Color Color => Color.FromArgb(51, 73, 61);
-    }
+
+		public override string[] ClassNanoList => new string[] { };
+	}
 }

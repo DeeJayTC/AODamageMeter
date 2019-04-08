@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AODamageMeter.FightEvents
@@ -86,8 +87,10 @@ namespace AODamageMeter.FightEvents
             : base(fight, timestamp, description)
         {
             SetSourceToOwner();
+			TryFixClass(description);
 
-            bool resisted = false, countered = false, aborted = false;
+
+			bool resisted = false, countered = false, aborted = false;
             if (TryMatch(Executing, out Match match))
             {
                 NanoProgram = match.Groups[1].Value;
@@ -161,5 +164,25 @@ namespace AODamageMeter.FightEvents
                 _latestPotentialStartEvent = null;
             }
         }
-    }
+
+		/// <summary>
+		/// We're temporarily using this to try to fix the class of chars
+		/// as ao char db is not available for RK2019
+		/// </summary>
+		/// <param name="description"></param>
+		public void TryFixClass(string description)
+		{
+			// If the owner already has the correct class
+			if (DamageMeter.Owner.Profession.ClassNanoList.Any(description.Contains)) return;
+
+			if (new Professions.Enforcer().ClassNanoList.Any(description.ToLower().Contains)) ChangeProfessionOfOwner("Enforcer");
+			if (new Professions.Adventurer().ClassNanoList.Any(description.Contains)) ChangeProfessionOfOwner("Adventurer");
+
+		}
+
+		public async void ChangeProfessionOfOwner(string prof)
+		{
+			DamageMeter.Owner.Profession = Profession.All.Single(p => p.Name == prof); ;
+		}
+	}
 }

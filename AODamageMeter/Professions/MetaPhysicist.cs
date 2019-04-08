@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Meta-Physicist";
         public override Color Color => Color.FromArgb(2, 104, 66);
-    }
+
+		public override string[] ClassNanoList => throw new System.NotImplementedException();
+	}
 }

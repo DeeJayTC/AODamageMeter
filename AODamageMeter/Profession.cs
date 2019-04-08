@@ -31,7 +31,9 @@ namespace AODamageMeter
         public abstract string Name { get; }
         public abstract Color Color { get; }
 
-        public override string ToString()
+		public abstract string[] ClassNanoList { get; }
+
+		public override string ToString()
             => Name;
     }
 }

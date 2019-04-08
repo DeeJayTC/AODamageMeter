@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Adventurer";
         public override Color Color => Color.FromArgb(84, 68, 67);
-    }
+
+		public override string[] ClassNanoList => new string[] { };
+	}
 }

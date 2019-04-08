@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Engineer";
         public override Color Color => Color.FromArgb(118, 126, 135);
-    }
+
+		public override string[] ClassNanoList => throw new System.NotImplementedException();
+	}
 }

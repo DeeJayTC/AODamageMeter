@@ -62,8 +62,11 @@ namespace AODamageMeter
 
                     if (fightCharacter.Profession != Profession.Unknown)
                     {
-                        _professionTotalLevels[fightCharacter.Profession] += fightCharacter.Level.Value;
-                        _professionTotalAlienLevels[fightCharacter.Profession] += fightCharacter.AlienLevel.Value;
+						if (fightCharacter.Level != null)
+						{
+							_professionTotalLevels[fightCharacter.Profession] += fightCharacter.Level.Value;
+							_professionTotalAlienLevels[fightCharacter.Profession] += fightCharacter.AlienLevel.Value;
+						}
                     }
                 }
             }

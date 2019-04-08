@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Bureaucrat";
         public override Color Color => Color.FromArgb(85, 85, 130);
-    }
+
+		public override string[] ClassNanoList => new string[] { };
+	}
 }

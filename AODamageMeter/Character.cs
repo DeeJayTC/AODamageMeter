@@ -147,27 +147,30 @@ namespace AODamageMeter
             {
                 character.IsPlayer = !IsAmbiguousPlayerName(character.Name);
 
-                var response = await _httpClient
-                    .GetAsync($"http://people.anarchy-online.com/character/bio/d/5/name/{character.Name}/bio.xml?data_type=json").ConfigureAwait(false);
-                if (response.IsSuccessStatusCode)
-                {
-                    var characterBio = await response.Content.ReadAsAsync<dynamic>().ConfigureAwait(false);
-                    if (characterBio != null) // If the character doesn't exist/hasn't been indexed yet, the JSON returned is null.
-                    {
-                        var playerInfo = characterBio[0];
-                        var organizationInfo = characterBio[1] as JObject == null ? null : characterBio[1];
-                        character.ID = playerInfo.CHAR_INSTANCE;
-                        character.Profession = Profession.All.Single(p => p.Name == (string)playerInfo.PROF);
-                        character.Breed = BreedHelpers.GetBreed((string)playerInfo.BREED);
-                        character.Gender = GenderHelpers.GetGender((string)playerInfo.SEX);
-                        character.Faction = FactionHelpers.GetFaction((string)playerInfo.SIDE);
-                        character.Level = int.Parse((string)playerInfo.LEVELX);
-                        character.AlienLevel = int.Parse((string)playerInfo.ALIENLEVEL);
-                        character.Organization = organizationInfo?.NAME;
-                        character.OrganizationRank = organizationInfo?.RANK_TITLE;
-                    }
-                }
-            }
+				character.ID = "na";
+				character.Profession = Profession.All.Single(p => p.Name == "Unknown");
+				character.Breed = BreedHelpers.GetBreed("Atrox");
+				character.Gender = GenderHelpers.GetGender("male");
+				character.Faction = FactionHelpers.GetFaction("neutral");
+				character.Level = 100;
+				character.AlienLevel = 0;
+				character.Organization = "";
+				character.OrganizationRank = "";
+
+
+				//var response = await _httpClient
+				//    .GetAsync($"http://people.anarchy-online.com/character/bio/d/5/name/{character.Name}/bio.xml?data_type=json").ConfigureAwait(false);
+				//if (response.IsSuccessStatusCode)
+				//{
+				//    var characterBio = await response.Content.ReadAsAsync<dynamic>().ConfigureAwait(false);
+				//    if (characterBio != null) // If the character doesn't exist/hasn't been indexed yet, the JSON returned is null.
+				//    {
+				//        var playerInfo = characterBio[0];
+				//        var organizationInfo = characterBio[1] as JObject == null ? null : characterBio[1];
+
+				//    }
+				//}
+			}
         }
 
         public static bool TryGetCharacter(string name, out Character character)

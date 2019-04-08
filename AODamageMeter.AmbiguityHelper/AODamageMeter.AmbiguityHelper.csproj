@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>AODamageMeter.AmbiguityHelper</RootNamespace>
     <AssemblyName>AODamageMeter.AmbiguityHelper</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -59,6 +59,9 @@
       <Project>{d55d5daf-e8cc-4f4e-a30f-d1358f89d934}</Project>
       <Name>AODamageMeter</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

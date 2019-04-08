@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AODamageMeter.UI.ViewModels
@@ -29,7 +30,9 @@ namespace AODamageMeter.UI.ViewModels
             ToggleIsPausedCommand = new RelayCommand(ExecuteToggleIsPausedCommand);
             ResetAndSaveFightCommand = new RelayCommand(ExecuteResetAndSaveFightCommand);
             ResetFightCommand = new RelayCommand(ExecuteResetFightCommand);
-            TryInitializeDamageMeter(Settings.Default.SelectedCharacterName, Settings.Default.SelectedLogFilePath);
+			TeamdumpCommand = new RelayCommand(ExecuteTeamdumpCommand);
+
+			TryInitializeDamageMeter(Settings.Default.SelectedCharacterName, Settings.Default.SelectedLogFilePath);
             // Performance optimization: don't let performance degrade as the # of fights in the fight history increase.
             // Would be more complicated to extend this to views within a historical fight, but possible. But don't need
             // to do it there because it's less expensive than the unavoidable cost of updating the current fight.
@@ -356,7 +359,81 @@ namespace AODamageMeter.UI.ViewModels
             StartNewFight();
         }
 
-        public bool TryRegisterOwnersFightPet(DamageDoneMainRow fightPetRow) => TryRegisterFightPet(fightPetRow);
+		public string GetSpaces(int numSpaces)
+		{
+			var spaces = "";
+			for(int i = 0; i < numSpaces; i++)
+			{
+				spaces += " ";
+			}
+			return spaces;
+		}
+
+		public ICommand TeamdumpCommand { get; }
+		private void ExecuteTeamdumpCommand()
+		{
+			if (DamageMeter == null) return;
+			if (string.IsNullOrEmpty(Settings.Default.SelectedScriptsPath))
+			{
+				MessageBox.Show("You need to setup your Anarchy Online rooth path first to use this.");
+				return;
+			}
+
+			var fight = DamageMeter.CurrentFight;
+
+			var order = 1;
+			var scriptContent = "<a href=\"text://Team Fight Statistics<br><br>#.Name | Total | DPM | Crit | Max | Duration <br><br>";
+
+			var LongestName = fight.FightCharacters.OrderByDescending(p => p.Name.Length).First().Name.Length;
+
+			foreach(var actor in fight.FightCharacters.Where(p=>p.IsPlayer).OrderByDescending(p=>p.TotalDamageDonePlusPets))
+			{
+				scriptContent += $"{order}.{actor.Name}{GetSpaces(LongestName - actor.Name.Length)}|";
+				scriptContent += $"{actor.TotalDamageDone.Format()} | {actor.TotalDamageDonePM.Format()} |";
+				scriptContent += $"{actor.CritDoneChance.Format()} % | {actor.MaxDamageDone.Format()} |";
+				scriptContent += $"{actor.ActiveDurationPlusPets.ToString(@"hh\:mm\:ss")}";
+
+				//var detailString = $"<a href='text://Damage Details for {actor.Name}<br><br>";
+				//var HasPets = actor.TotalDamageDone != actor.TotalDamageDonePlusPets;
+				//if (HasPets)
+				//{
+				//	detailString += "Damage by Player<br><br>";
+				//	detailString += $"Total : {actor.TotalDamageDone.Format()}<br><br>";
+				//	detailString += $"Total DPM : {actor.TotalDamageDonePM.Format()}<br><br>";
+
+				//	detailString += "Damage by Pets<br><br>";
+				//	detailString += $"Total : {(actor.TotalDamageDonePlusPets - actor.TotalDamageDone).Format()}<br><br>";
+				//	detailString += $"Total DPM : {(actor.TotalDamageDonePMPlusPets - actor.TotalDamageDonePM).Format()}<br><br>";
+
+				//	detailString += "Total<br><br>";
+				//	detailString += $"Total : {actor.TotalDamageDonePlusPets.Format()}<br><br>";
+				//	detailString += $"DPM   : {actor.TotalDamageDonePMPlusPets.Format()}<br><br>";
+
+				//}
+				//else
+				//{
+				//	detailString += "Damage by Player<br><br>";
+				//	detailString += $"Total : {actor.TotalDamageDone.Format()}<br>";
+				//	detailString += $"Hits         : {actor.TotalHitsDone.Format()}<br>";
+				//	detailString += $"Max hit      : {actor.MaxDamageDone.Format()}<br>";
+				//	detailString += $"Crits        : {actor.CritsDone.Format()}<br>";
+				//	detailString += $"Crit %       : {actor.CritDoneChance.Value.Format()} %<br>";
+				//	detailString += $"Nano DMG     : {actor.NanoDamageDone.Format()}<br>";
+				//	detailString += $"Specials DMG : {actor.SpecialDamageDone.Format()}<br>";
+				//	detailString += $"Specials Num : {actor.SpecialsDone.Format()}<br><br>";
+				//}
+				//detailString += $"'>Show</a>";
+
+				scriptContent += "<br>";
+				order += 1;
+			}
+			scriptContent += "\">Team Fight Damage Stats</a>";
+
+		}
+
+
+
+		public bool TryRegisterOwnersFightPet(DamageDoneMainRow fightPetRow) => TryRegisterFightPet(fightPetRow);
         public bool TryRegisterFightPet(DamageDoneMainRow fightPetRow, DamageDoneMainRow fightPetMasterRow = null)
         {
             lock (CurrentFight)

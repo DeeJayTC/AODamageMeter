@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Fixer";
         public override Color Color => Color.FromArgb(43, 105, 220);
-    }
+
+		public override string[] ClassNanoList => throw new System.NotImplementedException();
+	}
 }

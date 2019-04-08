@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Trader";
         public override Color Color => Color.FromArgb(143, 72, 126);
-    }
+
+		public override string[] ClassNanoList => throw new System.NotImplementedException();
+	}
 }

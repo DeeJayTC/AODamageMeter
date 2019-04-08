@@ -5,6 +5,10 @@
         xmlns:properties="clr-namespace:AODamageMeter.UI.Properties"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:AODamageMeter.UI.ViewModels"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance OptionsView}"
         Title="Options"
         Style="{StaticResource WindowStyle}" Background="Transparent"
         BorderBrush="{StaticResource LightBlueBrush50}" BorderThickness="1"
@@ -154,7 +158,13 @@
           </ComboBox.ItemsSource>
         </ComboBox>
 
-        <!-- TODO: Use binding instead of code-behind (tried, but keep running into problems). -->
+       <TextBlock Text="Anarchy Online Path" />
+       <TextBox Margin="0 2 0 5" x:Name="txtSelectedPath"/>
+       <StackPanel Orientation="Horizontal" Margin="0 2 0 5">
+            <Button Style="{StaticResource TextButtonStyle}"
+            Content="Choose..." Click="ChooseButton_Click_ShowFileDialog"/>
+        </StackPanel>
+                <!-- TODO: Use binding instead of code-behind (tried, but keep running into problems). -->
         <RadioButton x:Name="ShowPercentOfTotalRadioButton" GroupName="ShowPercent"
                      Checked="ShowPercentOfTotalRadioButton_Checked_Persist"
                      Unchecked="ShowPercentOfTotalRadioButton_Unchecked_Persist"

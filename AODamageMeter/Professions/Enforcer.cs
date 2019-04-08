@@ -8,5 +8,7 @@ namespace AODamageMeter.Professions
 
         public override string Name => "Enforcer";
         public override Color Color => Color.FromArgb(186, 70, 55);
-    }
+
+		public override string[] ClassNanoList => new string[] { "challenger", "rage", "essence", "mongo" };
+	}
 }
